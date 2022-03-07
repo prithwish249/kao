@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+
+
+{% block body %}
+<div class="form-area">
+	<form action="/" method="POST">
+		<input name="label" type="text" placeholder="Label for image" />
+		<input name="face_image" type="file" />
+		<button type="submit">submit</button>
+	</form>
+</div>
+{% endblock %}
