@@ -253,4 +253,13 @@ table {
   display: none;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+}
+
+#not-found,
+#found {
+  display: none;
+  font-size: 3rem;
+  font-weight: bold;
+  text-align: center;
 }

@@ -1,12 +1,8 @@
-from curses.panel import bottom_panel
-import json
 import face_recognition as fr
 from flask import Flask, render_template, request, redirect, jsonify
 import base64
 from PIL import Image, ImageDraw
-import os, io, sys
-import numpy as np
-import cv2
+import io
 
 
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
@@ -47,16 +43,14 @@ def detect_face_from_image(train, test, label):
             (left + 6, bottom - text_height - 5), label, fill=(255, 255, 255, 255)
         )
         del draw
-        pil_image.show()
+        # pil_image.show()
         rawBytes = io.BytesIO()
         pil_image.save(rawBytes, "JPEG")
         rawBytes.seek(0)
         img_base64 = base64.b64encode(rawBytes.read())
-        return img_base64
+        return {"res": str(img_base64), "error": False}
     else:
-        res["unknown"] = True
-
-    return res
+        return {"res": "", "error": True}
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -86,7 +80,7 @@ def home():
         ):
             res = detect_face_from_image(train, test, label)
 
-            return jsonify({"res": str(res)})
+            return jsonify(res)
 
     else:
         return render_template("index.html")

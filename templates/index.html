@@ -28,11 +28,16 @@
 
 </div>
 <div class="result">
+	<h1 id="found">We Found Them!</h1>
 	<img id='theImg' src='#'>
+	<h1 id="not-found">We Couldn't find a know face in the image.</h1>
 </div>
 <script>
 	const handleFormSubmit = (event) => {
 		event.preventDefault();
+		document.querySelector(".result").style.display = "none";
+		document.querySelector("#found").style.display = "none";
+		document.querySelector("#not-found").style.display = "none";
 		const train = document.querySelector("#train").files[0];
 		const test = document.querySelector("#test").files[0];
 
@@ -48,13 +53,18 @@
 		})
 			.then(res => res.json())
 			.then(d => {
-				let s = d["res"];
-				s = s.split("'")[1];
-				console.log(s);
-				let im = document.querySelector("#theImg");
 				document.querySelector(".result").style.display = "flex";
-				document.querySelector(".result").scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" })
-				im.src = 'data:image/jpeg;base64,' + s
+				if (d["error"]) {
+					document.querySelector("#not-found").style.display = "block";
+				} else {
+					let s = d["res"];
+					s = s.split("'")[1];
+					console.log(s);
+					document.querySelector("#found").style.display = "block";
+					let im = document.querySelector("#theImg");
+					document.querySelector(".result").scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" })
+					im.src = 'data:image/jpeg;base64,' + s
+				}
 			})
 			.catch(e => console.log(e))
 
