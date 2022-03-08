@@ -3,10 +3,82 @@
 
 {% block body %}
 <div class="form-area">
-	<form action="/" method="POST">
-		<input name="label" type="text" placeholder="Label for image" />
-		<input name="face_image" type="file" />
+
+	<form enctype="multipart/form-data" onsubmit="handleFormSubmit(event);">
+		<h1>Upload the Images</h1>
+		<div class=" form-input">
+			<label for="label">Name for face in image</label>
+			<input id="label" name="label" type="text" placeholder="Label for image" />
+		</div>
+		<div class="form-input">
+			<label for="face_train">Training Image</label>
+			<button class="btn">Upload Image</button>
+			<input id="train" name="face_train" type="file" />
+		</div>
+		<div class="form-input">
+			<label for="face_test">Testing Image</label>
+			<button class="btn">Upload Image</button>
+			<input id="test" name="face_test" type="file" />
+		</div>
+
+
+
 		<button type="submit">submit</button>
 	</form>
+
 </div>
+<div class="result">
+	<img id='theImg' src='#'>
+</div>
+<script>
+	const handleFormSubmit = (event) => {
+		event.preventDefault();
+		const train = document.querySelector("#train").files[0];
+		const test = document.querySelector("#test").files[0];
+
+		const data = new FormData();
+
+		data.append("face_train", train);
+		data.append("face_test", test);
+		data.append("label", document.querySelector("#label").value)
+
+		fetch("/", {
+			method: "POST",
+			body: data
+		})
+			.then(res => res.json())
+			.then(d => {
+				let s = d["res"];
+				s = s.split("'")[1];
+				console.log(s);
+				let im = document.querySelector("#theImg");
+				document.querySelector(".result").style.display = "flex";
+				document.querySelector(".result").scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" })
+				im.src = 'data:image/jpeg;base64,' + s
+			})
+			.catch(e => console.log(e))
+
+	}
+	// function Draw(loc = [], img_src) {
+	// 	console.log(loc)
+	// 	var img = document.getElementById("theImg");
+	// 	var cnvs = document.getElementById("myCanvas");
+	// 	console.log(URL.createObjectURL(img_src))
+	// 	img.src = URL.createObjectURL(img_src);
+	// 	console.log(img_src)
+	// 	cnvs.style.width = document.getElementById("theImg").width;
+	// 	cnvs.style.height = document.getElementById("theImg").height;
+
+	// 	cnvs.style.position = "absolute";
+	// 	cnvs.style.left = img.offsetLeft + "px";
+	// 	cnvs.style.top = img.offsetTop + "px";
+
+	// 	var ctx = cnvs.getContext("2d");
+	// 	ctx.beginPath();
+	// 	ctx.fillRect(loc[0], loc[1], loc[2], loc[3]);
+	// 	ctx.lineWidth = 3;
+	// 	ctx.strokeStyle = '#00ff00';
+	// 	ctx.stroke();
+	// }
+</script>
 {% endblock %}
