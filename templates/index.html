@@ -2,6 +2,12 @@
 
 
 {% block body %}
+<div class="loader-container">
+	<div class="lds-ripple">
+		<div></div>
+		<div></div>
+	</div>
+</div>
 <div class="form-area">
 
 	<form enctype="multipart/form-data" onsubmit="handleFormSubmit(event);">
@@ -30,11 +36,12 @@
 <div class="result">
 	<h1 id="found">We Found Them!</h1>
 	<img id='theImg' src='#'>
-	<h1 id="not-found">We Couldn't find a know face in the image.</h1>
+	<h1 id="not-found">We Couldn't find a known face in the image.</h1>
 </div>
 <script>
 	const handleFormSubmit = (event) => {
 		event.preventDefault();
+		document.querySelector(".loader-container").style.display = "flex";
 		document.querySelector(".result").style.display = "none";
 		document.querySelector("#found").style.display = "none";
 		document.querySelector("#not-found").style.display = "none";
@@ -54,8 +61,12 @@
 			.then(res => res.json())
 			.then(d => {
 				document.querySelector(".result").style.display = "flex";
+				document.querySelector(".loader-container").style.display = "none";
 				if (d["error"]) {
 					document.querySelector("#not-found").style.display = "block";
+					document.querySelector("#found").style.display = "none";
+					document.querySelector("#theImg").style.display = "none";
+					document.querySelector(".result").scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" })
 				} else {
 					let s = d["res"];
 					s = s.split("'")[1];
