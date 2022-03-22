@@ -155,6 +155,7 @@ table {
 .nav-links > li:hover {
   color: red;
   transform: scale(1.1);
+  cursor: pointer;
 }
 
 .form-area {
@@ -270,6 +271,21 @@ table {
   max-width: 550px;
   border-radius: 9px;
   box-shadow: 10px 1px 15px 0px grey;
+}
+
+.about {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  padding: 2rem;
+}
+
+.about h1 {
+  font-size: 2rem;
+  font-weight: bold;
 }
 
 /* Loader */

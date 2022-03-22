@@ -28,12 +28,12 @@
   <nav class="navbar">
     <h1 class="nav-logo">Kao</h1>
     <ul class="nav-links">
-      <li>Home</li>
-      <li>About</li>
+      <li
+        onclick="document.querySelector('.about').scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest' })">
+        About</li>
     </ul>
   </nav>
   {% block body %} {% endblock %}
-  <script src="js/scripts.js"></script>
 </body>
 
 </html>

@@ -38,6 +38,12 @@
 	<img id='theImg' src='#'>
 	<h1 id="not-found">We Couldn't find a known face in the image.</h1>
 </div>
+<div class="about">
+	<h1>Kao - Facial Recognition Project</h1>
+	<p>This project was done by Prithwish Adhikari(CSE), Sayan Basu Dhar(IT) and Pradipta Ghoshal(IT). This project
+		utilizes the face-recognition library to identify faces in images. Upload a train image with the face you want to
+		identify and upload a test image and see if the previous face can be identified.</p>
+</div>
 <script>
 	const handleFormSubmit = (event) => {
 		event.preventDefault();
@@ -77,7 +83,10 @@
 					im.src = 'data:image/jpeg;base64,' + s
 				}
 			})
-			.catch(e => console.log(e))
+			.catch(e => {
+				document.querySelector(".loader-container").style.display = "none";
+				alert("There was an error, please try again.")
+			})
 
 	}
 	// function Draw(loc = [], img_src) {

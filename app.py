@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, redirect, jsonify
 import base64
 from PIL import Image, ImageDraw
 import io
+import numpy as np
 
 
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
@@ -10,19 +11,31 @@ ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
 app = Flask(__name__)
 
 
+def resize_image(img, basewidth=300):
+    wpercent = basewidth / float(img.size[0])
+    hsize = int((float(img.size[1]) * float(wpercent)))
+    img = img.resize((basewidth, hsize), Image.ANTIALIAS)
+    return img
+
+
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 def detect_face_from_image(train, test, label):
-    res = {
-        "face_location": [],
-        "unknown": False,
-    }
-    train_img = fr.load_image_file(train)
+    train = Image.open(train)
+    t_io = io.BytesIO()
+
+    test = Image.open(test)
+    tst_io = io.BytesIO()
+
+    train = resize_image(train)
+    test = resize_image(test)
+
+    train_img = np.array(train)
     train_enc = fr.face_encodings(train_img)[0]
 
-    test_img = fr.load_image_file(test)
+    test_img = np.array(test)
     test_enc = fr.face_encodings(test_img)[0]
 
     results = fr.compare_faces([train_enc], test_enc)
