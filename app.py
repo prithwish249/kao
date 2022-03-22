@@ -6,7 +6,7 @@ import io
 import numpy as np
 
 
-ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
+ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "webp"}
 
 app = Flask(__name__)
 
@@ -33,10 +33,17 @@ def detect_face_from_image(train, test, label):
     test = resize_image(test)
 
     train_img = np.array(train)
-    train_enc = fr.face_encodings(train_img)[0]
-
+    train_enc = fr.face_encodings(train_img)
+    if len(train_enc) == 0:
+        return {"res": "", "error": True}
+    else:
+        train_enc = train_enc[0]
     test_img = np.array(test)
     test_enc = fr.face_encodings(test_img)[0]
+    if len(test_enc) == 0:
+        return {"res": "", "error": True}
+    else:
+        test_enc = test_enc[0]
 
     results = fr.compare_faces([train_enc], test_enc)
 
@@ -94,6 +101,8 @@ def home():
             res = detect_face_from_image(train, test, label)
 
             return jsonify(res)
+        else:
+            return {"res": "", "error": True}
 
     else:
         return render_template("index.html")
