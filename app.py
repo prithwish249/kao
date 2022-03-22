@@ -39,7 +39,7 @@ def detect_face_from_image(train, test, label):
     else:
         train_enc = train_enc[0]
     test_img = np.array(test)
-    test_enc = fr.face_encodings(test_img)[0]
+    test_enc = fr.face_encodings(test_img)
     if len(test_enc) == 0:
         return {"res": "", "error": True}
     else:
@@ -50,6 +50,7 @@ def detect_face_from_image(train, test, label):
     pil_image = Image.fromarray(test_img)
 
     draw = ImageDraw.Draw(pil_image)
+    print(results)
     if results[0]:
         (top, right, bottom, left) = fr.face_locations(test_img)[0]
         draw.rectangle(((left, top), (right, bottom)), outline=(0, 0, 0))
@@ -102,6 +103,7 @@ def home():
 
             return jsonify(res)
         else:
+            print("Here")
             return {"res": "", "error": True}
 
     else:
